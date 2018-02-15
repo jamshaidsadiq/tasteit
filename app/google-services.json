@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "350617645028",
+    "firebase_url": "https://androidtasteit.firebaseio.com",
+    "project_id": "androidtasteit",
+    "storage_bucket": "androidtasteit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350617645028:android:50821f0e593e61db",
+        "android_client_info": {
+          "package_name": "com.i360ihrd.tasteit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350617645028-76b7k0tmlh0li10geo641r252sast99v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.i360ihrd.tasteit",
+            "certificate_hash": "276d65cf31b2d6510cd209c36035109aaf1e8208"
+          }
+        },
+        {
+          "client_id": "350617645028-ogu2enap7n2ahd8ac6532kid6g03u0ep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB46dAR4zzqPddtFMS5VdiqkL-xGOsZ0Y0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350617645028-ogu2enap7n2ahd8ac6532kid6g03u0ep.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
