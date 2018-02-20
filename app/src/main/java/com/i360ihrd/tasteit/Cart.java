@@ -1,18 +1,26 @@
 package com.i360ihrd.tasteit;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Common.Config;
 import com.i360ihrd.tasteit.Database.Database;
 import com.i360ihrd.tasteit.Model.Order;
+import com.i360ihrd.tasteit.Model.Request;
 import com.i360ihrd.tasteit.ViewHolder.CartAdapter;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
@@ -37,13 +45,15 @@ public class Cart extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
-    DatabaseReference request;
+    DatabaseReference requests;
 
     TextView txtTotalPrice;
     FButton btnPlace;
 
     List<Order> cart = new ArrayList<>();
     CartAdapter adapter;
+
+    String address;
 
     static PayPalConfiguration config = new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(Config.PAYPAL_CLIENT_ID);
 
@@ -53,8 +63,8 @@ public class Cart extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
 
-//        database = FirebaseDatabase.getInstance();
-//        request  = database.getReference("Requests");
+        database = FirebaseDatabase.getInstance();
+        requests  = database.getReference("Requests");
 
         //init paypal
         Intent intent = new Intent(this, PayPalService.class);
@@ -75,6 +85,39 @@ public class Cart extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                showAlertDialog();
+
+            }
+        });
+        
+        loadListFood();
+        
+    }
+
+    private void showAlertDialog() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Cart.this);
+        alertDialog.setTitle("One more step");
+        alertDialog.setMessage("Enter your address: ");
+
+        final EditText edtAddress = new EditText(Cart.this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+
+        );
+
+        edtAddress.setLayoutParams(layoutParams);
+        alertDialog.setView(edtAddress);
+        alertDialog.setIcon(R.drawable.ic_shopping_cart_black_24dp);
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                address = edtAddress.getText().toString();
+
                 String amount = txtTotalPrice.getText().toString().replace("$","").replace(",","");
                 PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(amount),"USD","Taste It App Order",PayPalPayment.PAYMENT_INTENT_SALE);
                 Intent intent1 = new Intent(getApplicationContext(), PaymentActivity.class);
@@ -82,11 +125,20 @@ public class Cart extends AppCompatActivity {
                 intent1.putExtra(PaymentActivity.EXTRA_PAYMENT,payPalPayment);
                 startActivityForResult(intent1,PAYPAL_REQUEST_CODE);
 
+
+
             }
         });
-        
-        loadListFood();
-        
+
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+
     }
 
     @Override
@@ -101,7 +153,20 @@ public class Cart extends AppCompatActivity {
                    try{
                        String paymentDetail = confirmation.toJSONObject().toString(4);
                        JSONObject jsonObject = new JSONObject(paymentDetail);
-                       System.out.println(jsonObject);
+                       Request request = new Request(
+                               Common.currentUser.getPhone(),
+                               Common.currentUser.getName(),
+                               address,txtTotalPrice.getText().toString(),
+                               "0",
+                               jsonObject.getJSONObject("response").getString("state")
+                               ,cart);
+                       requests.child(String.valueOf(System.currentTimeMillis())).setValue(request);
+
+                       //delete cart
+                       new Database(getBaseContext()).ClearCart();
+                       Toast.makeText(Cart.this,"Thank you , Order Placed",Toast.LENGTH_SHORT);
+
+                       finish();
 
                    } catch (JSONException e) {
                        e.printStackTrace();
@@ -110,6 +175,11 @@ public class Cart extends AppCompatActivity {
 
                }
 
+           }else if(resultCode== Activity.RESULT_CANCELED){
+               Toast.makeText(this, "Payment cancel", Toast.LENGTH_SHORT).show();
+               
+           }else if(resultCode == PaymentActivity.RESULT_EXTRAS_INVALID){
+               Toast.makeText(this, "Invalid Payment", Toast.LENGTH_SHORT).show();
            }
 
 
