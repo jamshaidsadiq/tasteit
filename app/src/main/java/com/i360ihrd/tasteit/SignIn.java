@@ -51,7 +51,7 @@ public class SignIn extends AppCompatActivity {
                        mDialog.dismiss();
                        //Check If user exists in database
 
-                        if(dataSnapshot.child(editPhone.getText().toString()).exists()){
+                         if(dataSnapshot.child(editPhone.getText().toString()).exists()){
                             // get User Information
                             User user = dataSnapshot.child(editPhone.getText().toString()).getValue(User.class);
                             user.setPhone(editPhone.getText().toString());
