@@ -40,7 +40,7 @@ import java.util.Locale;
 import info.hoang8f.widget.FButton;
 
 public class Cart extends AppCompatActivity {
-    private static final int PAYPAL_REQUEST_CODE = 9999;
+    private static final int PAYPAL_REQUEST_CODE = 9998;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
 
