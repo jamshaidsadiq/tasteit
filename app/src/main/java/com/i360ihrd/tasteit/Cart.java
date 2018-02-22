@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Common.Config;
 import com.i360ihrd.tasteit.Database.Database;
+import com.i360ihrd.tasteit.Helpers.RecyclerItemTouchHelper;
 import com.i360ihrd.tasteit.Model.Order;
 import com.i360ihrd.tasteit.Model.Request;
 import com.i360ihrd.tasteit.ViewHolder.CartAdapter;
@@ -39,7 +43,7 @@ import java.util.Locale;
 
 import info.hoang8f.widget.FButton;
 
-public class Cart extends AppCompatActivity {
+public class Cart extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private static final int PAYPAL_REQUEST_CODE = 9998;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -191,6 +195,13 @@ public class Cart extends AppCompatActivity {
         adapter = new CartAdapter(cart,this);
         recyclerView.setAdapter(adapter);
 
+        // adding item touch helper
+        // only ItemTouchHelper.LEFT added to detect Right to Left swipe
+        // if you want both Right -> Left and Left -> Right
+        // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this ,this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
         //Calculate total price
         int total = 0;
         for(Order order:cart)
@@ -199,5 +210,11 @@ public class Cart extends AppCompatActivity {
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
         txtTotalPrice.setText(fmt.format(total));
 
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+    adapter.removeItem(viewHolder.getAdapterPosition());
+    loadListFood();
     }
 }

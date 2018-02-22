@@ -10,6 +10,7 @@ public class Order {
     private String Quantity;
     private String Price;
     private String Discount;
+    private String ID;
 
 
     public Order() {
@@ -21,6 +22,25 @@ public class Order {
         Quantity = quantity;
         Price = price;
         Discount = discount;
+    }
+
+    public Order(String Id,String productId, String productName, String quantity, String price, String discount) {
+        ProductId = productId;
+        ProductName = productName;
+        Quantity = quantity;
+        Price = price;
+        Discount = discount;
+        ID = Id;
+    }
+
+    public
+    String getID() {
+        return ID;
+    }
+
+    public
+    void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getProductId() {

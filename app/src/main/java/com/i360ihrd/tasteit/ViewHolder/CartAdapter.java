@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.i360ihrd.tasteit.Database.Database;
 import com.i360ihrd.tasteit.Interface.ItemClickListener;
 import com.i360ihrd.tasteit.Model.Order;
 import com.i360ihrd.tasteit.R;
@@ -22,30 +24,6 @@ import java.util.Locale;
 /**
  * Created by Jamshaid on 13-02-2018.
  */
-
-class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public TextView txt_cart_name,txt_price;
-    public ImageView img_cart_count;
-
-
-    private ItemClickListener itemClickListener;
-
-    public void setTxt_cart_name(TextView txt_cart_name) {
-        this.txt_cart_name = txt_cart_name;
-    }
-
-    public CartViewHolder(View itemView) {
-        super(itemView);
-        txt_cart_name = (TextView)itemView.findViewById(R.id.cart_item_name);
-        txt_price = (TextView)itemView.findViewById(R.id.cart_item_price);
-        img_cart_count = (ImageView) itemView.findViewById(R.id.cart_item_count);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-}
 
 public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
     private List<Order> listData = new ArrayList<>();
@@ -80,5 +58,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
     @Override
     public int getItemCount() {
         return listData.size();
+    }
+
+    public void removeItem(int position){
+
+      Order order = listData.get(position);
+
+      new Database(context).removeFromCart(order.getID());
+
+      listData.remove(position);
+
+     // notifyItemRemoved(position);
+
     }
 }
