@@ -83,11 +83,19 @@ public class Database extends SQLiteAssetHelper {
 
     }
 
+<<<<<<< HEAD
     public void RemoveCart(String id){
 
 
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail where ID =%d",id);
+=======
+    public void removeFromCart(String id){
+
+
+        SQLiteDatabase db = getReadableDatabase();
+        String query = String.format("DELETE FROM OrderDetail where ID = %s",id);
+>>>>>>> 7ad9287c7a40f5da5a9d51adf49abd0239e136b7
         db.execSQL(query);
 
     }
