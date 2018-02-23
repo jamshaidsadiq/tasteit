@@ -5,6 +5,7 @@ package com.i360ihrd.tasteit.Model;
  */
 
 public class Order {
+    private String ID;
     private String ProductId;
     private String ProductName;
     private String Quantity;
@@ -15,12 +16,30 @@ public class Order {
     public Order() {
     }
 
-    public Order(String productId, String productName, String quantity, String price, String discount) {
+    public Order(String ID, String productId, String productName, String quantity, String price, String discount) {
+        this.ID = ID;
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;
         Price = price;
         Discount = discount;
+    }
+
+     public Order(String productId, String productName, String quantity, String price, String discount) {
+
+        ProductId = productId;
+        ProductName = productName;
+        Quantity = quantity;
+        Price = price;
+        Discount = discount;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getProductId() {
