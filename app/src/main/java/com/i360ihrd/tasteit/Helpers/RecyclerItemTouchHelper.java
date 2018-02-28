@@ -2,6 +2,8 @@ package com.i360ihrd.tasteit.Helpers;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -65,7 +67,6 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         int deleteIconRight = itemView.getRight() - deleteIconMargin;
         int deleteIconBottom = deleteIconTop + this.intrinsicHeight;
         this.deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
-        int color = Color.parseColor("#FFFFFF");
         this.deleteIcon.draw(c);
 
     }
