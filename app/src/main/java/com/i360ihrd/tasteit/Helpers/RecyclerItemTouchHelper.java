@@ -67,7 +67,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         this.deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
         int color = Color.parseColor("#FFFFFF");
         this.deleteIcon.draw(c);
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
     }
 
     public interface RecyclerItemTouchHelperListener {
