@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -66,6 +67,7 @@ public class Home extends AppCompatActivity
     Category newCategory;
     Uri uriSave;
     private final int PICK_IMAGE_REQUEST = 71;
+    DrawerLayout drawer;
 
     FirebaseRecyclerAdapter<Category,MenuViewHolder> adapter;
 
@@ -97,7 +99,7 @@ public class Home extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -159,6 +161,7 @@ public class Home extends AppCompatActivity
 
                 if(newCategory !=null){
                     category.push().setValue(newCategory);
+                    Snackbar.make(drawer,"New Category "+newCategory.getName()+" was added",Snackbar.LENGTH_SHORT).show();
                 }
 
             }
@@ -187,7 +190,7 @@ public class Home extends AppCompatActivity
             dialog.show();
 
             String imageName = UUID.randomUUID().toString();
-            final StorageReference imageFolder = storageReference.child("images/"+imageName);
+            final StorageReference imageFolder = storageReference.child(imageName);
             imageFolder.putFile(uriSave).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public
@@ -199,6 +202,7 @@ public class Home extends AppCompatActivity
                         public
                         void onSuccess(Uri uri) {
                             newCategory = new Category(edtName.getText().toString(),uri.toString());
+
                         }
                     });
                 }
@@ -253,9 +257,9 @@ public class Home extends AppCompatActivity
                 menuViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Intent food = new Intent(Home.this,FoodList.class);
-                        food.putExtra("CategoryId",adapter.getRef(position).getKey());
-                        startActivity(food);
+//                        Intent food = new Intent(Home.this,FoodList.class);
+//                        food.putExtra("CategoryId",adapter.getRef(position).getKey());
+//                        startActivity(food);
                     }
                 });
             }
@@ -320,4 +324,131 @@ public class Home extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    //update / delete
+
+
+    @Override
+    public
+    boolean onContextItemSelected(MenuItem item) {
+        if(item.getTitle().equals(Common.UPDATE)){
+            showUpdateDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
+        }else if(item.getTitle().equals(Common.DELETE)){
+            deleteCategory(adapter.getRef(item.getOrder()).getKey());
+        }
+
+
+        return super.onContextItemSelected(item);
+    }
+
+    private
+    void deleteCategory(String key) {
+        category.child(key).removeValue();
+        Toast.makeText(this, "Item Deleted....!!!", Toast.LENGTH_SHORT).show();
+    }
+
+    private
+    void showUpdateDialog(final String key, final Category item) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
+        alertDialog.setTitle("Update Category");
+        alertDialog.setMessage("Please Fill full Information");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View add_menu_layout = inflater.inflate(R.layout.add_new_menu_layout,null);
+        edtName = add_menu_layout.findViewById(R.id.edtName);
+        btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
+        btnSelect = add_menu_layout.findViewById(R.id.btnSelect);
+
+        edtName.setText(item.getName());
+
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public
+            void onClick(View v) {
+                choosImage();
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public
+            void onClick(View v) {
+               changeImage(item);
+            }
+        });
+
+        alertDialog.setView(add_menu_layout);
+        alertDialog.setIcon(R.drawable.ic_shopping_cart_black_24dp);
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public
+            void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+
+             item.setName(edtName.getText().toString());
+             category.child(key).setValue(item);
+
+            }
+        });
+
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public
+            void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alertDialog.show();
+
+
+    }
+
+    private void changeImage(final Category item) {
+
+        if(uriSave !=null){
+            final ProgressDialog dialog = new ProgressDialog(this);
+            dialog.setMessage("Uploading....!!!!");
+            dialog.show();
+
+            String imageName = UUID.randomUUID().toString();
+            final StorageReference imageFolder = storageReference.child(imageName);
+            imageFolder.putFile(uriSave).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public
+                void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    dialog.dismiss();
+                    Toast.makeText(Home.this, "uploaded...!!", Toast.LENGTH_SHORT).show();
+                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public
+                        void onSuccess(Uri uri) {
+                          item.setImage(uri.toString());
+
+
+                        }
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public
+                void onFailure(@NonNull Exception e) {
+                    dialog.dismiss();
+                    Toast.makeText(Home.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public
+                void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                    dialog.setMessage("Uploaded "+progress+"%");
+                }
+            });
+        }
+
+    }
+
+
 }
