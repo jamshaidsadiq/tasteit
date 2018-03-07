@@ -89,10 +89,6 @@ public class Database extends SQLiteAssetHelper {
 
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail where ID = %s",id);
-<<<<<<< HEAD
-=======
-
->>>>>>> dd2ef52352a29bc6c8f81008a35d95ead8b47944
         db.execSQL(query);
 
     }

@@ -11,7 +11,7 @@ public class Order {
     private String Quantity;
     private String Price;
     private String Discount;
-
+    private String ID;
 
 
     public Order() {
@@ -26,15 +26,10 @@ public class Order {
         Discount = discount;
     }
 
-<<<<<<< HEAD
 
-    public Order(String productId, String productName, String quantity, String price, String discount) {
-
-=======
 
      public Order(String productId, String productName, String quantity, String price, String discount) {
 
->>>>>>> dd2ef52352a29bc6c8f81008a35d95ead8b47944
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;
@@ -43,22 +38,14 @@ public class Order {
 
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> dd2ef52352a29bc6c8f81008a35d95ead8b47944
 
    public String getID() {
         return ID;
     }
 
-<<<<<<< HEAD
-    public void setID(String ID) {
-=======
-    public
-    void setID(String ID) {
 
->>>>>>> dd2ef52352a29bc6c8f81008a35d95ead8b47944
+    public void setID(String ID) {
         this.ID = ID;
     }
 
