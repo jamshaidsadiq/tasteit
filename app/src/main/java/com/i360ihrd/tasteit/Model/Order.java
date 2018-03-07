@@ -32,6 +32,7 @@ public class Order {
         Quantity = quantity;
         Price = price;
         Discount = discount;
+
     }
     public
     String getID() {
