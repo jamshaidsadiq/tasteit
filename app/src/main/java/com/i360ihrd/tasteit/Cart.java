@@ -122,12 +122,37 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelper.R
 
                 address = edtAddress.getText().toString();
 
-                String amount = txtTotalPrice.getText().toString().replace("$","").replace(",","");
-                PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(amount),"USD","Taste It App Order",PayPalPayment.PAYMENT_INTENT_SALE);
-                Intent intent1 = new Intent(getApplicationContext(), PaymentActivity.class);
-                intent1.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
-                intent1.putExtra(PaymentActivity.EXTRA_PAYMENT,payPalPayment);
-                startActivityForResult(intent1,PAYPAL_REQUEST_CODE);
+
+
+
+
+
+                //String amount = txtTotalPrice.getText().toString().replace("$","").replace(",","");
+
+
+
+                Request request = new Request(
+                        Common.currentUser.getPhone(),
+                        Common.currentUser.getName(),
+                        address,txtTotalPrice.getText().toString(),
+                        "0",
+                        "Approved"
+                        ,cart);
+                requests.child(String.valueOf(System.currentTimeMillis())).setValue(request);
+
+                //delete cart
+                new Database(getBaseContext()).ClearCart();
+                Toast.makeText(Cart.this,"Thank you , Order Placed",Toast.LENGTH_SHORT);
+
+                finish();
+
+
+
+//                PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(amount),"USD","Taste It App Order",PayPalPayment.PAYMENT_INTENT_SALE);
+//                Intent intent1 = new Intent(getApplicationContext(), PaymentActivity.class);
+//                intent1.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,config);
+//                intent1.putExtra(PaymentActivity.EXTRA_PAYMENT,payPalPayment);
+//                startActivityForResult(intent1,PAYPAL_REQUEST_CODE);
 
 
 
