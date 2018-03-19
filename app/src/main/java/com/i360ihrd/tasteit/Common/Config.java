@@ -5,5 +5,5 @@ package com.i360ihrd.tasteit.Common;
  */
 
 public class Config {
-    public static final String PAYPAL_CLIENT_ID = "AQPV8JokdSK21Bou0JZJ5kmuGriaj5Bh_ci051wpOjAFuiZngawnaKXmhWu0xcKp7uWg26WeLZjrg29Q";
+    public static final String PAYPAL_CLIENT_ID = "Af6r40T5aSpryHU5eHgJdx4Z4Ra4qV20gUZt0KBpKKbxd7qd1us4P1CH4c1N20VBbhU0HnG4ZKk6LGA4";
 }

@@ -68,7 +68,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
       listData.remove(position);
 
-     // notifyItemRemoved(position);
+      //notifyItemRemoved(position);
 
     }
 }

@@ -85,7 +85,7 @@ public class Home extends AppCompatActivity
         category = database.getReference("Category");
 
         storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference("images/");
+        storageReference = storage.getReference("gs:images/");
 
 
          fab = (FloatingActionButton) findViewById(R.id.fab);
