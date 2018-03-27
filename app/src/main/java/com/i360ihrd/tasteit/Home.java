@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Interface.ItemClickListener;
 import com.i360ihrd.tasteit.Model.Category;
+import com.i360ihrd.tasteit.Service.ListenOrder;
 import com.i360ihrd.tasteit.ViewHolder.MenuViewHolder;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
@@ -120,6 +121,9 @@ public class Home extends AppCompatActivity
         recycler_menu.setLayoutManager(layoutManager);
 
         loadMenu();
+
+        Intent service = new Intent(Home.this, ListenOrder.class);
+        startService(service);
     }
 
     private void showUploadPopup() {

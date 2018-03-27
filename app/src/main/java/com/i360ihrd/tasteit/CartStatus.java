@@ -57,7 +57,7 @@ public class CartStatus extends AppCompatActivity {
                 orderViewHolder.txtOderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderAddress.setText((request.getAddress()));
                 orderViewHolder.txtOrderPhone.setText(request.getPhone());
-                orderViewHolder.txtOrderStatus.setText(convertCode(request.getStatus()));
+                orderViewHolder.txtOrderStatus.setText(Common.convertCode(request.getStatus()));
 
                 orderViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
@@ -121,14 +121,7 @@ public class CartStatus extends AppCompatActivity {
 alertDialog.show();
     }
 
-    private String convertCode(String status) {
-        if(status.equals("0"))
-            return "Placed";
-        else if (status.equals("1"))
-            return "On my way";
-        else
-            return "Shipped";
-    }
+
 
 
 }
