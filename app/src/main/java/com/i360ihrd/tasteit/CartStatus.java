@@ -1,6 +1,7 @@
 package com.i360ihrd.tasteit;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,7 +54,7 @@ public class CartStatus extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(Request.class,R.layout.order_layout,OrderViewHolder.class,requests.orderByChild("phone").equalTo(Common.currentUser.getPhone())) {
             @Override
-            protected void populateViewHolder(OrderViewHolder orderViewHolder, Request request, int i) {
+            protected void populateViewHolder(OrderViewHolder orderViewHolder, final Request request, int i) {
                 orderViewHolder.txtOderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderAddress.setText((request.getAddress()));
                 orderViewHolder.txtOrderPhone.setText(request.getPhone());
@@ -63,7 +64,9 @@ public class CartStatus extends AppCompatActivity {
                     @Override
                     public
                     void onClick(View view, int position, boolean isLongClick) {
-
+                        Intent tracIntent = new Intent(CartStatus.this,TrackingOrder.class);
+                        Common.currentRequest = request;
+                        startActivity(tracIntent);
                     }
                 });
 

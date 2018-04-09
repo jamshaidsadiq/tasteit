@@ -2,6 +2,7 @@ package com.i360ihrd.tasteit;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Model.User;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import io.paperdb.Paper;
+
 public class SignIn extends AppCompatActivity {
     EditText editPhone,editPassword;
     Button btnSignIn;
@@ -32,7 +35,7 @@ public class SignIn extends AppCompatActivity {
         editPhone = (MaterialEditText)findViewById(R.id.editPhone);
 
         btnSignIn = (Button)findViewById(R.id.btnSignIn);
-
+        Paper.init(this);
         // init firebase
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -57,6 +60,13 @@ public class SignIn extends AppCompatActivity {
                             user.setPhone(editPhone.getText().toString());
 
                             if(user.getPassword().equals(editPassword.getText().toString())){
+
+
+
+                                Paper.book().write(Common.USER_KEY,editPhone.getText().toString());
+                                Paper.book().write(Common.PWD_KEY,editPassword.getText().toString());
+
+
                                 Intent intent = new Intent(SignIn.this,Home.class);
                                 Common.currentUser = user;
                                 startActivity(intent);

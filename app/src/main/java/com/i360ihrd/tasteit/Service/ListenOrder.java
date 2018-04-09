@@ -1,11 +1,14 @@
 package com.i360ihrd.tasteit.Service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
@@ -71,18 +74,41 @@ class ListenOrder extends Service implements ChildEventListener {
         Intent intent = new Intent(getBaseContext(), CartStatus.class);
         intent.putExtra("userPhone",req.getPhone());
         PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-        builder.setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
-                .setTicker("360 IHRD")
-                .setContentInfo("Your order was updated")
-                .setContentText("Order #"+key+" was update status to "+ Common.convertCode(req.getStatus()))
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // create channel object with unique ID
+            NotificationChannel channel = new NotificationChannel(Common.CHANNEL_ID, "OrderUpdate", NotificationManager.IMPORTANCE_DEFAULT);
+            //Configure Channel's initial settings
+            channel.setLightColor(Color.GREEN);
 
-        NotificationManager notificationManager = (NotificationManager)getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1,builder.build());
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext(),Common.CHANNEL_ID);
+            builder.setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setWhen(System.currentTimeMillis())
+                    .setTicker("360 IHRD")
+                    .setContentInfo("Your order was updated")
+                    .setContentText("Order #" + key + " was update status to " + Common.convertCode(req.getStatus()))
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher);
+
+            NotificationManager notificationManager = (NotificationManager) getBaseContext().getSystemService(Service.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+            notificationManager.notify(1, builder.build());
+        }else{
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+            builder.setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_ALL)
+                    .setWhen(System.currentTimeMillis())
+                    .setTicker("360 IHRD")
+                    .setContentInfo("Your order was updated")
+                    .setContentText("Order #" + key + " was update status to " + Common.convertCode(req.getStatus()))
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.mipmap.ic_launcher);
+
+            NotificationManager notificationManager = (NotificationManager) getBaseContext().getSystemService(Service.NOTIFICATION_SERVICE);
+
+            notificationManager.notify(1, builder.build());
+        }
     }
 
     @Override
