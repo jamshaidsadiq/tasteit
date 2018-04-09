@@ -98,7 +98,7 @@ public class CartStatus extends AppCompatActivity {
         View update_order_layout = inflater.inflate(R.layout.update_order_layout,null);
 
         spinner = (MaterialSpinner)update_order_layout.findViewById(R.id.statusSpinner);
-        spinner.setItems("Placed","On my way","Shipped");
+        spinner.setItems("Placed","On my way","Shipped","uuuuuuu");
 
         alertDialog.setView(update_order_layout);
 
