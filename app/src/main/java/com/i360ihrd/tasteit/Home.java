@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Interface.ItemClickListener;
 import com.i360ihrd.tasteit.Model.Category;
+import com.i360ihrd.tasteit.Service.ListenOrder;
 import com.i360ihrd.tasteit.ViewHolder.MenuViewHolder;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
@@ -44,6 +45,7 @@ import com.squareup.picasso.Picasso;
 import java.util.UUID;
 
 import info.hoang8f.widget.FButton;
+import io.paperdb.Paper;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,6 +122,9 @@ public class Home extends AppCompatActivity
         recycler_menu.setLayoutManager(layoutManager);
 
         loadMenu();
+
+        Intent service = new Intent(Home.this, ListenOrder.class);
+        startService(service);
     }
 
     private void showUploadPopup() {
@@ -314,6 +319,10 @@ public class Home extends AppCompatActivity
             startActivity(orders);
 
         } else if (id == R.id.nav_log_out) {
+            Paper.init(this);
+            Paper.book().destroy();
+
+
             Intent signin = new Intent(Home.this,SignIn.class);
             signin.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(signin);

@@ -57,17 +57,19 @@ public class CartStatus extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Request, OrderViewHolder>(Request.class,R.layout.order_layout,OrderViewHolder.class,requests.orderByChild("phone").equalTo(Common.currentUser.getPhone())) {
             @Override
-            protected void populateViewHolder(OrderViewHolder orderViewHolder, Request request, int i) {
+            protected void populateViewHolder(OrderViewHolder orderViewHolder, final Request request, int i) {
                 orderViewHolder.txtOderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderAddress.setText((request.getAddress()));
                 orderViewHolder.txtOrderPhone.setText(request.getPhone());
-                orderViewHolder.txtOrderStatus.setText(convertCode(request.getStatus()));
-                req = request;
+
+                orderViewHolder.txtOrderStatus.setText(Common.convertCode(request.getStatus()));
+
 
                 orderViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public
                     void onClick(View view, int position, boolean isLongClick) {
+
                         String adres = req.getAddress().replace(" ","+");
                         adres = "google.navigation:q="+adres;
                         //adres = String.format("google.navigation:q= = %s",adres);
@@ -75,6 +77,7 @@ public class CartStatus extends AppCompatActivity {
                                 Uri.parse(adres));
 
                          startActivity(intent);
+
                     }
                 });
 
@@ -106,7 +109,7 @@ public class CartStatus extends AppCompatActivity {
         View update_order_layout = inflater.inflate(R.layout.update_order_layout,null);
 
         spinner = (MaterialSpinner)update_order_layout.findViewById(R.id.statusSpinner);
-        spinner.setItems("Placed","On my way","Shipped");
+        spinner.setItems("Placed","On my way","Shipped","uuuuuuu");
 
         alertDialog.setView(update_order_layout);
 
@@ -132,14 +135,7 @@ public class CartStatus extends AppCompatActivity {
 alertDialog.show();
     }
 
-    private String convertCode(String status) {
-        if(status.equals("0"))
-            return "Placed";
-        else if (status.equals("1"))
-            return "On my way";
-        else
-            return "Shipped";
-    }
+
 
 
 }
