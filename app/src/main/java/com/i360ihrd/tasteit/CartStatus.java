@@ -2,6 +2,7 @@ package com.i360ihrd.tasteit;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class CartStatus extends AppCompatActivity {
 
     MaterialSpinner spinner;
 
+    public Request req;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +61,23 @@ public class CartStatus extends AppCompatActivity {
                 orderViewHolder.txtOderId.setText(adapter.getRef(i).getKey());
                 orderViewHolder.txtOrderAddress.setText((request.getAddress()));
                 orderViewHolder.txtOrderPhone.setText(request.getPhone());
+
                 orderViewHolder.txtOrderStatus.setText(Common.convertCode(request.getStatus()));
+
 
                 orderViewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public
                     void onClick(View view, int position, boolean isLongClick) {
-                        Intent tracIntent = new Intent(CartStatus.this,TrackingOrder.class);
-                        Common.currentRequest = request;
-                        startActivity(tracIntent);
+
+                        String adres = req.getAddress().replace(" ","+");
+                        adres = "google.navigation:q="+adres;
+                        //adres = String.format("google.navigation:q= = %s",adres);
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse(adres));
+
+                         startActivity(intent);
+
                     }
                 });
 
