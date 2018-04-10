@@ -54,7 +54,8 @@
 
         <activity
             android:name=".TrackingOrder"
-            android:label="@string/title_activity_tracking_order"></activity>
+            android:label="@string/title_activity_tracking_order" />
+        <activity android:name=".PhoneVerify"></activity>
     </application>
 
 </manifest>
