@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Model.User;
+
 
 import io.paperdb.Paper;
 
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         txtSlogan.setTypeface(face);
 
 
+
+
         Paper.init(this);
 
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(username !=null && Password !=null){
             if(!username.isEmpty() && !Password.isEmpty()){
+
                 login(username,Password);
             }
         }
@@ -78,8 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
     private
     void login(final String username, final String password) {
+        
+        if(Common.isConnectTointernet(getBaseContext())){
 
-
+        FirebaseApp.initializeApp(MainActivity.this);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("User");
 
@@ -122,7 +129,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
+    }else{
+            Toast.makeText(this, "Please Check your Connection..!!!", Toast.LENGTH_SHORT).show();
+        }
+    
+    
     }
 }

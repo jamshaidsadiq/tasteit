@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -73,6 +75,8 @@ public class Home extends AppCompatActivity
 
     FirebaseRecyclerAdapter<Category,MenuViewHolder> adapter;
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +85,7 @@ public class Home extends AppCompatActivity
 
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
-
+        FirebaseApp.initializeApp(this);
         //init firebase
         database = FirebaseDatabase.getInstance();
         category = database.getReference("Category");
@@ -120,11 +124,24 @@ public class Home extends AppCompatActivity
         recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
         layoutManager = new LinearLayoutManager(this);
         recycler_menu.setLayoutManager(layoutManager);
-
-        loadMenu();
+        if(Common.isConnectTointernet(getBaseContext())) {
+            loadMenu();
+        }else{
+            Toast.makeText(this, "Please Check Your Connection", Toast.LENGTH_SHORT).show();
+        }
 
         Intent service = new Intent(Home.this, ListenOrder.class);
         startService(service);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefresh) ;
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public
+            void onRefresh() {
+                loadMenu();
+            }
+        });
     }
 
     private void showUploadPopup() {
@@ -271,6 +288,8 @@ public class Home extends AppCompatActivity
         };
 
         recycler_menu.setAdapter(adapter);
+        if(mSwipeRefreshLayout != null)
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -298,7 +317,9 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
 
-
+        if(id == R.id.refresh){
+           loadMenu();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -311,8 +332,11 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_menu) {
             // Handle the camera action
         } else if (id == R.id.nav_cart) {
-            Intent cart = new Intent(Home.this,Cart.class);
-            startActivity(cart);
+
+                Intent phone = new Intent(Home.this,PhoneVerify.class);
+                startActivity(phone);
+//            Intent cart = new Intent(Home.this,Cart.class);
+//            startActivity(cart);
 
         } else if (id == R.id.nav_orders) {
             Intent orders = new Intent(Home.this,CartStatus.class);
