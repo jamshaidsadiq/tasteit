@@ -72,6 +72,8 @@ dependencies {
 
     compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     compile 'io.paperdb:paperdb:2.6'
+    compile 'com.facebook.android:facebook-share:[4,5)'
+
 
 
 }
