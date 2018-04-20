@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "350617645028-chse79sol938d8dqmml2rorhr8rljsg8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.i360ihrd.tasteit",
+            "certificate_hash": "f5afc52be94f26bdf56f600c8e54404a209cd70f"
+          }
+        },
+        {
           "client_id": "350617645028-76b7k0tmlh0li10geo641r252sast99v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

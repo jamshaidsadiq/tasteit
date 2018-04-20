@@ -87,11 +87,6 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
         FirebaseApp.initializeApp(this);
         //init firebase
-        database = FirebaseDatabase.getInstance();
-        category = database.getReference("Category");
-
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference("gs:images/");
 
 
          fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -269,7 +264,13 @@ public class Home extends AppCompatActivity
     }
 
     private void loadMenu() {
-         adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
+        database = FirebaseDatabase.getInstance();
+        category = database.getReference("Category");
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference("gs:images/");
+
+        adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class,R.layout.menu_item,MenuViewHolder.class,category) {
             @Override
             protected void populateViewHolder(MenuViewHolder menuViewHolder, Category category, int i) {
                 menuViewHolder.txtMenuName.setText(category.getName());

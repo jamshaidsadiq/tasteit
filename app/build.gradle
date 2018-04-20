@@ -74,6 +74,7 @@ dependencies {
     compile 'io.paperdb:paperdb:2.6'
     compile 'com.facebook.android:facebook-share:[4,5)'
 
+    compile 'com.github.mancj:MaterialSearchBar:0.7.6'
 
 
 }
