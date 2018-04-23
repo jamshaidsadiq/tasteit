@@ -2,14 +2,20 @@ package com.i360ihrd.tasteit;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +25,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.i360ihrd.tasteit.Common.Common;
 import com.i360ihrd.tasteit.Model.User;
 
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import io.paperdb.Paper;
 
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
 
 
@@ -42,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Typeface face = Typeface.createFromAsset(getAssets(),"fonts/NABILA.TTF");
         txtSlogan.setTypeface(face);
 
-
+       // printkeyHash();
 
 
         Paper.init(this);
@@ -79,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(siginup);
             }
         });
+    }
+
+    private
+    void printkeyHash() {
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.i360ihrd.tasteit",PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     private
