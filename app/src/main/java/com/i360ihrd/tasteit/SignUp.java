@@ -16,7 +16,7 @@ import com.i360ihrd.tasteit.Model.User;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 public class SignUp extends AppCompatActivity {
-    MaterialEditText editPhone , editName,editPassword;
+    MaterialEditText editPhone , editName,editPassword,editSecureCode;
     Button btnSignUp;
 
     @Override
@@ -27,6 +27,8 @@ public class SignUp extends AppCompatActivity {
         editName = (MaterialEditText)findViewById(R.id.editName);
         editPhone = (MaterialEditText)findViewById(R.id.editPhone);
         editPassword = (MaterialEditText)findViewById(R.id.editPassword);
+        editSecureCode = (MaterialEditText)findViewById(R.id.editSecureCode);
+
 
         btnSignUp = (Button)findViewById(R.id.btnSignUp);
 
@@ -54,7 +56,7 @@ public class SignUp extends AppCompatActivity {
                         }else{
                             mDialog.dismiss();
 
-                            User user = new User(editName.getText().toString(),editPassword.getText().toString());
+                            User user = new User(editName.getText().toString(),editPassword.getText().toString(),editSecureCode.getText().toString());
                             table_user.child(editPhone.getText().toString()).setValue(user);
                             Toast.makeText(SignUp.this,"Signed Up Successfully",Toast.LENGTH_SHORT).show();
 

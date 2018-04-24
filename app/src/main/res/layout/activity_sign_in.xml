@@ -50,6 +50,13 @@
             app:met_singleLineEllipsis="true" />
 
 
+        <TextView
+            android:id="@+id/txtForgotPwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_pwd"
+            android:textColor="@android:color/white" />
+
     </LinearLayout>
 
     <info.hoang8f.widget.FButton
